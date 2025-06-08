@@ -37,7 +37,7 @@ Pretrained vision-language models (VLMs) such as CLIP excel in multimodal unders
 
 ```
 CultureCLIP/
-├── data_curation/           # Data preparation and curation tools
+├── data_curation/           # Data preparation
 │   ├── bottom_up/          # Bottom-up concept collection (Section 3.1)
 │   │   ├── filter.py      # Filter raw data for concept mining
 │   │   └── classification.py  # Classify concepts from filtered data
@@ -54,7 +54,7 @@ CultureCLIP/
 │       ├── image_gen.py    # Generate images using diffusion models
 │       └── quality_check.py  # Filter generated images
 │  
-├── model_finetune/         # Model training and fine-tuning
+├── model_finetune/         # Model training and fine-tuning (Section 4)
 │   ├── run_clip_lora.py    # Main training script with LoRA support
 │   ├── run_clip_lora.sh    # Training script launcher
 │   ├── data.py            # Data loading and processing
@@ -70,7 +70,7 @@ CultureCLIP/
 
 - Clone the repository:
 ```bash
-git clone https://github.com/CultureCLIP.git
+git clone https://github.com/lukahhcm/CultureCLIP.git
 cd CultureCLIP
 ```
 
@@ -89,7 +89,7 @@ The data curation pipeline consists of three main steps:
 
 #### Step 1: Concept Mining and Twin Matching (Section 3.1)
 
-Bottom-up Collection:
+- Bottom-up Collection:
 ```bash
 # Filter raw data
 python data_curation/bottom_up/filter.py
@@ -97,35 +97,35 @@ python data_curation/bottom_up/filter.py
 python data_curation/bottom_up/classification.py
 ```
 
-Top-down Generation:
+- Top-down Generation:
 ```bash
 # Generate country-category pairs
 python data_curation/top_down/country_taxonomy.py
 
-# Generate concept pairs
+# Generate concepts
 python data_curation/top_down/concept_generation.py
 ```
 
-Twin matching:
+- Twin matching:
 ```bash
 python data_curation/twin_matching.py
 ```
 
 #### Step 2: Diverse Caption Generation (Section 3.2)
 
-Generate diverse captions for the twin pairs:
+- Generate diverse captions for the twin pairs:
 ```bash
 python data_curation/diverse_caption.py
 ```
 
 #### Step 3: Image Synthesis and Quality Filtering (Section 3.3)
 
-1. Generate images using diffusion models:
+- Generate images from captions:
 ```bash
 bash data_curation/image_generation/run.sh
 ```
 
-2. Filter generated images for quality:
+- Filter generated images for quality:
 ```bash
 python data_curation/image_generation/quality_check.py
 ```
