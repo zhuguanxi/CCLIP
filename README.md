@@ -2,34 +2,13 @@
 
 # CultureCLIP: Empowering CLIP with Cultural Awareness through Synthetic Images and Contextualized Captions
 
-</div>
-
-<!-- <div align="center">
-<b><a href="https://scholar.google.com/citations?user=ULvoYXgAAAAJ&hl=zh-CN" target="_blank">Zhitao He</a><sup>1</sup> <a href="https://github.com/Zhitao-He/MMBoundary" target="_blank"> Sandeep Polisetty</a><sup>1,2</sup> <a href="https://zhiyuan.fan/" target="_blank">Zhiyuan Fan</a><sup>1</sup> <a href="https://lukahhcm.github.io/" target="_blank"> Yuchen Huang</a><sup>1</sup> <a href="https://shujinwu-0814.github.io/" target="_blank"> Shujin Wu</a><sup>1,3</sup> <a href="https://mayrfung.github.io/" target="_blank">Yi R. (May) Fung</a><sup>1</sup></b>
-
-
-<sup>1 </sup>HKUST &nbsp; <sup>2 </sup> UMass Amherst &nbsp; <sup>3 </sup>USC
-
-[![ArXiv](https://img.shields.io/badge/arXiv-2505.23224-B31B1B.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2505.23224)
-[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-Hugging%20Face-blue)](https://huggingface.co/datasets/Zhitao-He/MMBoundary)
-
-</div>
-
-<br>
-
-## News
-
-- **2025/05/15:** 🔥 **MMBoundary** is accepted to ACL 2025 Main Conference!
-
---- -->
-
 ## Introduction
 
 Pretrained vision-language models (VLMs) such as CLIP excel in multimodal understanding but struggle with contextually relevant fine-grained visual features, making it difficult to distinguish visually similar yet culturally distinct concepts. This limitation stems from the scarcity of high-quality culture-specific datasets, the lack of integrated contextual knowledge, and the absence of hard negatives highlighting subtle distinctions. To address these challenges, we first design a data curation pipeline that leverages open-sourced VLMs and text-to-image diffusion models to construct **CulTwin**, a synthetic cultural dataset. This dataset consists of paired concept-caption-image triplets, where concepts visually resemble each other but represent different cultural contexts. Then, we fine-tune CLIP on CulTwin to create **CultureCLIP**, which aligns cultural concepts with contextually enhanced captions and synthetic images through customized contrastive learning, enabling finer cultural differentiation while preserving generalization capabilities. Experiments on culturally relevant benchmarks show that CultureCLIP outperforms the base CLIP, achieving a notable 5.49% improvement in fine-grained concept recognition on specific tasks, while preserving CLIP's original generalization ability, validating the effectiveness of our synthetic dataset and training paradigm in capturing subtle cultural distinctions.
 
 <div align="center">
 <h3>CultureCLIP Overview</h3>
-<img src= "./assets/pipeline.png" width=“90%" alt= "MMBoundary"/>
+<img src= "./assets/pipeline.png" width=“90%" alt= "CultureCLIP"/>
 </div>
 
 
