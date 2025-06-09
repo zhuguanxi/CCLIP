@@ -1,6 +1,7 @@
 <div align="center">
 
 # CultureCLIP: Empowering CLIP with Cultural Awareness through Synthetic Images and Contextualized Captions
+</div>
 
 ## Introduction
 
