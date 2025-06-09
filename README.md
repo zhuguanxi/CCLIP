@@ -9,7 +9,7 @@ Pretrained vision-language models (VLMs) such as CLIP excel in multimodal unders
 
 <div align="center">
 <h3>CultureCLIP Overview</h3>
-<img src= "./assets/pipeline.png" width=“90%" alt= "CultureCLIP"/>
+<img src= "assets/pipeline.png" width=“90%" alt= "CultureCLIP"/>
 </div>
 
 
