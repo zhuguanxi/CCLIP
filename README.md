@@ -12,7 +12,7 @@
 <a href="https://wenyanli.org/" target="_blank"> Wenyan Li</a><sup>1,3</sup> 
 <a href="https://mayrfung.github.io/" target="_blank">Yi R. (May) Fung</a><sup>1</sup></b>
 
-<sup>1 </sup>HKUST &nbsp; <sup>2 </sup> UMass Amherst &nbsp; <sup>3 </sup>UCPH
+<sup>1 </sup>HKUST &nbsp; <sup>2 </sup> UMass Amherst &nbsp; <sup>3 </sup>University of Copenhagen
 
 <!-- [![ArXiv](https://img.shields.io/badge/arXiv-2505.23224-B31B1B.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2505.23224)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-Hugging%20Face-blue)](https://huggingface.co/datasets/Zhitao-He/MMBoundary) -->
