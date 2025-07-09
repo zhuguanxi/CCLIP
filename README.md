@@ -20,7 +20,7 @@
 
 ## News
 
-- **2025/07/7:** 🔥🔥 **CultureCLIP** is accepted to COLM 2025 Conference!
+- **2025/07/07:** 🔥🔥 **CultureCLIP** is accepted to COLM 2025 Conference!
 
 
 ## Introduction
@@ -163,18 +163,20 @@ python evaluation/benchmark_GlobalRG_Grounding.py --model_path your_model_path
 python evaluation/benchmark_CROPE.py --model_path your_model_path
 ```
 
-<!-- ## Citation
-
-If you use this code in your research, please cite:
+## Citation
 
 ```bibtex
-@inproceedings{cultureclip2025,
-  title={Empowering CLIP with Cultural Awareness through Synthetic Images and Contextualized Captions},
-  author={Your Name},
-  booktitle={Conference on Language Modeling (COLM)},
-  year={2025}
+@misc{huang2025cultureclipempoweringclipcultural,
+      title={CultureCLIP: Empowering CLIP with Cultural Awareness through Synthetic Images and Contextualized Captions}, 
+      author={Yuchen Huang and Zhiyuan Fan and Zhitao He and Sandeep Polisetty and Wenyan Li and Yi R. Fung},
+      year={2025},
+      eprint={2507.06210},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2507.06210}, 
 }
-``` -->
+```
+
 
 ## License
 
