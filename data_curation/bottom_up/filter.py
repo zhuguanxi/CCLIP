@@ -1,4 +1,10 @@
 import os
+# 強制讓 os.chmod 變成什麼都不做的函數，避開 /mnt 權限錯誤
+def mock_chmod(path, mode, *args, **kwargs):
+    pass
+os.chmod = mock_chmod
+
+import os
 import re
 import ast
 import json
@@ -7,9 +13,12 @@ import torch
 from datasets import load_dataset
 from transformers import AutoProcessor, AutoModelForImageTextToText
 
-cache_dir = "/data/yuchen/huggingface/"
-processor = AutoProcessor.from_pretrained("Qwen/Qwen2-VL-7B-Instruct", cache_dir=cache_dir)
-model = AutoModelForImageTextToText.from_pretrained("Qwen/Qwen2-VL-7B-Instruct", cache_dir=cache_dir, device_map="auto", torch_dtype="auto")
+# cache_dir = "/data/yuchen/huggingface/"
+cache_dir = "/mnt/M3_Lab/hsi/huggingface_cache/"
+processor = AutoProcessor.from_pretrained("Qwen/Qwen2.5-VL-7B-Instruct", cache_dir=cache_dir)
+processor.tokenizer.padding_side = 'left'
+
+model = AutoModelForImageTextToText.from_pretrained("Qwen/Qwen2.5-VL-7B-Instruct", cache_dir=cache_dir, device_map={"": 0}, torch_dtype=torch.bfloat16, trust_remote_code=True)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # model = model.to(device)
@@ -56,7 +65,7 @@ def analyze_page_titles_batch(titles):
     """
     prompts = [
         f"""
-        Please determine whether the concept '{title}' clearly and unambiguously belongs to one of the eight cultural categories (Cuisine, Clothing, Animals & Plants, Art, Architecture, Daily Life, Symbol, or Festival). If the concept is only loosely related, culturally ambiguous, or does not strongly align with any of the categories, please select 'A' to ensure strict filtering. The concept does not clearly belong to any of the eight categories. The concept is clearly and directly related to one of the eight categories. Answer only with 'A' or 'B'.
+        Please determine whether the concept '{title}' clearly and unambiguously belongs to one of the six cultural categories (Cuisine, Clothing, Art, Architecture, Symbol, or Festival). If the concept is only loosely related, culturally ambiguous, or does not strongly align with any of the categories, please select 'A' to ensure strict filtering. The concept does not clearly belong to any of the eight categories. The concept is clearly and directly related to one of the eight categories. Answer only with 'A' or 'B'.
 
         Output the result in JSON format as follows:
         {{
@@ -64,6 +73,25 @@ def analyze_page_titles_batch(titles):
         }}
         """
         for title in titles
+        '''
+        f"""
+        Please determine whether the concept '{title}' clearly and unambiguously belongs to one of the SIX cultural categories: 
+        1. Cuisine (Food/Cooking)
+        2. Clothing (Traditional garments/Accessories)
+        3. Art (Fine arts/Traditional crafts)
+        4. Architecture (Buildings/Structures)
+        5. Symbol (Religious icons, mythological figures, cultural symbols)
+        6. Festival (Holidays/Ceremonies).
+
+        If the concept is loosely related, modern, or does not strongly align with these traditional cultural categories, select 'A'. 
+        If it is a clear, culturally significant concept from the 6 categories above, select 'B'.
+
+        Answer ONLY in the following JSON format:
+        {{
+            "concept_type": "A" or "B"
+        }}
+        """
+        '''
     ]
 
     messages = [
@@ -85,7 +113,7 @@ def analyze_page_titles_batch(titles):
     inputs = processor(text=texts, return_tensors="pt", padding=True).to(device)
 
     # Generate results
-    outputs = model.generate(**inputs)
+    outputs = model.generate(**inputs, max_new_tokens=128)
 
     # Decode outputs
     responses = processor.batch_decode(outputs, skip_special_tokens=True)
@@ -110,7 +138,13 @@ def process_wit_dataset(output_file, progress_file='wit_progress.txt', batch_siz
     processed_count = 0
 
     # Load WIT dataset
-    ds = load_dataset("google/wit")
+    # ds = load_dataset("google/wit")
+    ds = load_dataset(
+        "google/wit", 
+        cache_dir="/mnt/M3_Lab/hsi/huggingface_cache/datasets", 
+        trust_remote_code=True,
+        keep_in_memory=False
+    )
     train_dataset = ds['train']
 
     # Check progress file
@@ -118,17 +152,26 @@ def process_wit_dataset(output_file, progress_file='wit_progress.txt', batch_siz
         with open(progress_file, 'r') as progress_f:
             processed_count = int(progress_f.read().strip())
 
-    total_samples = len(train_dataset)
+    total_samples = len(train_dataset)  # 3700萬筆資料
+    limit_samples = 100000  
     
+    end_index = min(total_samples, limit_samples)
+
     with open(output_file, 'a', encoding='utf-8') as out_f:
-        for i in range(processed_count, total_samples, batch_size):
+        for i in range(processed_count, end_index, batch_size):
             batch_data = train_dataset[i:i + batch_size]
-            titles = [item['page_title'] for item in batch_data]
+            titles = batch_data['page_title']
 
             # Analyze titles
             results = analyze_page_titles_batch(titles)
+            
+            keys = batch_data.keys()
+            batch_items = [
+                {key: batch_data[key][j] for key in keys} 
+                for j in range(len(titles))
+            ]
 
-            for item, result in zip(batch_data, results):
+            for item, result in zip(batch_items, results):
                 if not result:
                     continue
                     
@@ -158,7 +201,7 @@ def process_wit_dataset(output_file, progress_file='wit_progress.txt', batch_siz
             with open(progress_file, 'w') as progress_f:
                 progress_f.write(str(i + batch_size))
                 progress_f.flush()
-            print(f"Processed {min(i + batch_size, total_samples)} / {total_samples} entries...")
+            print(f"Processed {min(i + batch_size, end_index)} / {end_index} entries...")
     
     print(f"Processing completed. Results saved to {output_file}")
 

@@ -8,9 +8,10 @@ import requests
 from io import BytesIO
 import re
 
-cache_dir = "/data/yuchen/huggingface/"
-processor = AutoProcessor.from_pretrained("Qwen/Qwen2-VL-7B-Instruct", cache_dir=cache_dir)
-model = AutoModelForImageTextToText.from_pretrained("Qwen/Qwen2-VL-7B-Instruct", cache_dir=cache_dir, device_map="auto", torch_dtype="auto")
+# cache_dir = "/data/yuchen/huggingface/"
+cache_dir = "/mnt/M3_Lab/hsi/huggingface_cache/"
+processor = AutoProcessor.from_pretrained("Qwen/Qwen2.5-VL-7B-Instruct", cache_dir=cache_dir)
+model = AutoModelForImageTextToText.from_pretrained("Qwen/Qwen2.5-VL-7B-Instruct", cache_dir=cache_dir, device_map="auto", torch_dtype="auto")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -20,13 +21,13 @@ culture_category = {
     
     "Clothing": "Encompasses traditional garments, accessories, and adornments from various cultures. It includes not only clothing but also items like jewelry, headwear, and footwear that hold cultural significance, reflecting identity, status, and traditions.",
     
-    "Animal & Plants": "Describes the native species, both fauna and flora, that hold cultural importance. This category includes the use of animals and plants in mythology, cuisine, traditional medicine, and environmental practices, as well as their roles in folklore and symbolism.",
+    #"Animal & Plants": "Describes the native species, both fauna and flora, that hold cultural importance. This category includes the use of animals and plants in mythology, cuisine, traditional medicine, and environmental practices, as well as their roles in folklore and symbolism.",
     
     "Art": "Includes visual arts, sculptures, and other forms of artistic expression that represent a culture's aesthetic and artistic heritage. This encompasses paintings, sculptures, performance arts, and crafts that reflect the identity, beliefs, and historical evolution of a community.",
     
     "Architecture": "Refers to the design, style, and structures built by a particular culture. This includes traditional houses, temples, monuments, and public buildings that showcase the engineering, material use, and aesthetic values of the culture.",
     
-    "Daily Life": "Covers the everyday activities, routines, and practices that define how people in a particular culture live. This includes family roles, work habits, and leisure activities, as well as practices around health, education, and community.",
+    #"Daily Life": "Covers the everyday activities, routines, and practices that define how people in a particular culture live. This includes family roles, work habits, and leisure activities, as well as practices around health, education, and community.",
     
     "Symbol": "Involves the symbols, logos, and imagery that carry cultural meaning. This category includes national flags, religious icons, mythological figures, and colors that convey beliefs, values, and identity in various contexts.",
     
@@ -35,8 +36,8 @@ culture_category = {
 
 # Define valid categories
 VALID_CATEGORIES = {
-    "Cuisine", "Clothing", "Animal & Plants", "Art", 
-    "Architecture", "Daily Life", "Symbol", "Festival"
+    "Cuisine", "Clothing", "Art", 
+    "Architecture", "Symbol", "Festival"
 }
 
 # Define prompt templates
@@ -59,10 +60,10 @@ text_template = (
     "- Cultural Category: IMPORTANT - You MUST choose exactly ONE category from these eight predefined categories:\n"
     "  * Cuisine\n"
     "  * Clothing\n"
-    "  * Animal & Plants\n"
+    # "  * Animal & Plants\n"
     "  * Art\n"
     "  * Architecture\n"
-    "  * Daily Life\n"
+    # "  * Daily Life\n"
     "  * Symbol\n"
     "  * Festival\n"
     "  Do not use any other categories. If the concept doesn't clearly fit into one of these categories, choose the closest match.\n"
@@ -309,13 +310,13 @@ def analyze_concepts_batch(items):
                         "Painting": "Art",
                         "Sculpture": "Art",
                         "Craft": "Art",
-                        "Creature": "Animal & Plants",
-                        "Plant": "Animal & Plants",
-                        "Flora": "Animal & Plants",
-                        "Fauna": "Animal & Plants",
-                        "Custom": "Daily Life",
-                        "Tradition": "Daily Life",
-                        "Practice": "Daily Life"
+                        # "Creature": "Animal & Plants",
+                        # "Plant": "Animal & Plants",
+                        # "Flora": "Animal & Plants",
+                        # "Fauna": "Animal & Plants",
+                        # "Custom": "Daily Life",
+                        # "Tradition": "Daily Life",
+                        # "Practice": "Daily Life"
                     }
                     category = category_mapping.get(category, "Symbol")  # Default to Symbol if no mapping found
                     print(f"Mapped category to '{category}'")
