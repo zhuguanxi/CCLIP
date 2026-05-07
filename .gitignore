@@ -1,0 +1,30 @@
+# --- 模型與大型快取 ---
+huggingface_cache/
+datasets/
+*.bin
+*.safetensors
+*.pth
+*.onnx
+
+# --- 實驗數據與產出 (根據你的檔名) ---
+*.jsonl
+*.csv
+# 排除所有 txt 結尾的進度檔
+*_progress.txt
+wit_progress.txt
+
+# --- Python 環境 ---
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+build/
+dist/
+
+# --- 編輯器設定 ---
+.vscode/
+.idea/
+.DS_Store
